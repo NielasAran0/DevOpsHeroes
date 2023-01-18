@@ -14,22 +14,29 @@ import java.util.List;
 @Command(name = "chaos", mixinStandardHelpOptions = true)
 public class ChaosCommand implements Runnable {
 
-    @CommandLine.Option(
-        names = {"--deployment", "-d"}, required = true, description = "The targeted deployment")
+    @CommandLine.Option(names = { "--deployment", "-d" }, required = true, description = "The targeted deployment")
     String deployment;
 
-    @Inject KubernetesClient kubernetes;
-    @Inject Logger logger;
+    @Inject
+    KubernetesClient kubernetes;
+    @Inject
+    Logger logger;
 
     @Override
     public void run() {
         logger.infof("Connected to %s, current namespace is %s", kubernetes.getMasterUrl(), kubernetes.getNamespace());
 
+        int deleteOnce = 0;
         List<Pod> pods = kubernetes.pods().list().getItems();
         for (Pod pod : pods) {
             logger.infof("Pod %s - %s", pod.getMetadata().getName(), pod.getStatus().getPhase());
             for (OwnerReference reference : pod.getMetadata().getOwnerReferences()) {
                 logger.infof("\t Owner: %s (%s)", reference.getName(), reference.getKind());
+            }
+            if (pod.getMetadata().getName().contains("first-service") && deleteOnce == 0) {
+                kubernetes.pods().withName(pod.getMetadata().getName()).delete();
+                logger.infof("Pod %s will be deleted: - %s", pod.getMetadata().getName(), pod.getStatus().getPhase());
+                deleteOnce = 1;
             }
         }
 

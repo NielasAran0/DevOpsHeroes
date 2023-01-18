@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-service
+  labels:
+    app: second-service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: second-service
+  template:
+    metadata:
+      labels:
+        app: second-service
+    spec:
+      containers:
+        - name: second-service
+          image: workshop/second-service-jvm:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          env:
+            - name: SLOW
+              valueFrom:
+                configMapKeyRef:
+                  name: second-service-config
+                  key: slow

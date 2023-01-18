@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: villain-config
+data:
+  database: 'jdbc:postgresql://supes-database-villain:5432/supes'

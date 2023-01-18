@@ -9,4 +9,7 @@ RUN microdnf install java-11-openjdk-devel unzip  \
 COPY HelloWorld.java /root
 
 # Set the default command to run when a new container is started with this image:
-ENTRYPOINT jbang/bin/jbang /root/HelloWorld.java
+# ENTRYPOINT jbang/bin/jbang /root/HelloWorld.java
+
+RUN jbang/bin/jbang export portable /root/HelloWorld.java
+ENTRYPOINT ["java", "-jar", "HelloWorld.jar"]

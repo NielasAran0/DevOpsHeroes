@@ -1,4 +1,4 @@
-package me.escoffier.workshop.supes;
+package me.escoffier.workshop.supes.hero;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import javax.persistence.Column;

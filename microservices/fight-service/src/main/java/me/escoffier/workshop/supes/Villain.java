@@ -18,6 +18,6 @@ public class Villain {
                 ", level=" + level +
                 ", picture='" + picture + '\'' +
                 ", powers='" + powers + '\'' +
-                '}';
+                "}\n";
     }
 }

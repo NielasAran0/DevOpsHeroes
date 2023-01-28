@@ -18,6 +18,7 @@ public class FightResource {
     private static final Logger LOGGER = Logger.getLogger(FightResource.class);
     
     @Inject @RestClient HeroServiceClient heroServiceClient;
+    @Inject @RestClient VillainServiceClient villainServiceClient;
 
     @GET
     @Path("/heroes/random")
@@ -27,34 +28,34 @@ public class FightResource {
         return hero;
     }
 
-    // @GET
-    // @Path("/villains/random")
-    // public Villain getRandomVillain() {
-    //     Villain villain = Villain.findRandom();
-    //     LOGGER.debug("Found random villain " + villain);
-    //     return villain;
-    // }
+    @GET
+    @Path("/villains/random")
+    public Villain getRandomVillain() {
+        Villain villain = villainServiceClient.getRandomVillain();
+        LOGGER.debug("Found random villain " + villain);
+        return villain;
+    }
 
-    // @GET
-    // @Path("/fight")
-    // public Fight fight() {
-    //     return fight(
-    //             getRandomHero(),
-    //             getRandomVillain()
-    //     );
-    // }
+    @GET
+    @Path("/fight")
+    public Fight fight() {
+        return fight(
+                getRandomHero(),
+                getRandomVillain()
+        );
+    }
 
-    // private final Random random = new Random();
+    private final Random random = new Random();
 
-    // private Fight fight(Hero hero, Villain villain) {
-    //     int heroAdjust = random.nextInt(20);
-    //     int villainAdjust = random.nextInt(20);
+    private Fight fight(Hero hero, Villain villain) {
+        int heroAdjust = random.nextInt(20);
+        int villainAdjust = random.nextInt(20);
 
-    //     if ((hero.level + heroAdjust) >= (villain.level + villainAdjust)) {
-    //         return new Fight(hero, villain, hero.name);
-    //     } else {
-    //         return new Fight(hero, villain, villain.name);
-    //     }
-    // }
+        if ((hero.level + heroAdjust) >= (villain.level + villainAdjust)) {
+            return new Fight(hero, villain, hero.name);
+        } else {
+            return new Fight(hero, villain, villain.name);
+        }
+    }
 
 }

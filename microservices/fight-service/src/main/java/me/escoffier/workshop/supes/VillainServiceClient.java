@@ -11,18 +11,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.time.temporal.ChronoUnit;
 
-@RegisterRestClient(configKey = "hero-service")
-public interface HeroServiceClient {
+@RegisterRestClient(configKey = "villain-service")
+public interface VillainServiceClient {
 
     @Timeout(value = 1, unit = ChronoUnit.SECONDS) // <---- Added
     @Fallback(fallbackMethod = "getFallbackQuote") // <---- Added
-    @Path("/heroes/random")
+    @Path("/villains/random")
     @GET
-    Hero getRandomHero();
+    Villain getRandomVillain();
     
     // A simple fallback
-    default Hero getFallbackQuote() {
-        return new Hero();
+    default Villain getFallbackQuote() {
+        return new Villain();
     }
 
 }

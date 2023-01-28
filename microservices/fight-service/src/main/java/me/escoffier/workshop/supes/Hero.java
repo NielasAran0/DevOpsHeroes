@@ -19,6 +19,6 @@ public class Hero {
                 ", level=" + level +
                 ", picture='" + picture + '\'' +
                 ", powers='" + powers + '\'' +
-                '}';
+                "}\n";
     }
 }
